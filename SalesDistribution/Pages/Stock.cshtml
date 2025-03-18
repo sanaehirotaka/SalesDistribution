@@ -1,0 +1,210 @@
+﻿@page "{sku}"
+@model SalesDistribution.Pages.StockModel
+@{
+    ViewData["Title"] = "在庫管理";
+}
+@section Scripts {
+    <script src="~/js/Stock.js" defer></script>
+}
+<form method="post">
+    <input asp-for="Rute" type="hidden" />
+    <input asp-for="Sku" type="hidden" />
+    <h2>@(ViewData["Title"])</h2>
+    <div class="text-danger">@Html.ValidationSummary()</div>
+    <fieldset disabled>
+        <legend>品目</legend>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
+                SKU
+            </div>
+            <div class="col-2">
+                <input asp-for="Item.Sku" type="text" class="form-control" readonly />
+            </div>
+            <div class="col-4">
+                <span asp-validation-for="Item.Sku" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
+                品目
+            </div>
+            <div class="col-5">
+                <input asp-for="Item.Name" type="text" class="form-control" readonly />
+            </div>
+            <div class="col-4">
+                <span asp-validation-for="Item.Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
+                詳細
+            </div>
+            <div class="col-5">
+                <textarea asp-for="Item.Description" rows="2" class="form-control"></textarea>
+            </div>
+            <div class="col-4">
+                <span asp-validation-for="Item.Description" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
+                設定
+            </div>
+            <div class="col-2">
+                <div class="form-check form-switch">
+                    <label class="form-check-label">
+                        <input asp-for="Item.PurchaseTarget" class="form-check-input" type="checkbox">
+                        仕入の対象
+                    </label>
+                </div>
+                <div class="form-check form-switch">
+                    <label class="form-check-label">
+                        <input asp-for="Item.SalesTarget" class="form-check-input" type="checkbox">
+                        販売の対象
+                    </label>
+                </div>
+                <div class="form-check form-switch">
+                    <label class="form-check-label">
+                        <input asp-for="Item.BundleTarget" class="form-check-input" type="checkbox">
+                        この品目はバンドル
+                    </label>
+                </div>
+            </div>
+            <div class="col-4">
+                <span asp-validation-for="Item.BundleTarget" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
+                在庫数量
+            </div>
+            <div class="col-2">
+                <div class="input-group">
+                    <input asp-for="Stock.TotalAmount" inputmode="numeric" type="text" class="form-control" />
+                    <span class="input-group-text">@(Model.Item.UnitName)</span>
+                </div>
+            </div>
+            <div class="col-1">
+                平均単価
+            </div>
+            <div class="col-2">
+                <div class="input-group">
+                    <input value="@(Math.Round(Model.Stock.PurchaseUnitPrice, 3))" type="text" inputmode="numeric" class="form-control" />
+                    <span class="input-group-text">円</span>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>入庫</legend>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
+                入庫日付
+            </div>
+            <div class="col-2">
+                <input asp-for="StockHistory.Date" class="form-control" type="date" />
+            </div>
+            <div class="col-1">
+                入庫数量
+            </div>
+            <div class="col-2">
+                <div class="input-group">
+                    <input asp-for="StockHistory.Amount" type="text" inputmode="numeric" class="form-control" />
+                    <span class="input-group-text">@(Model.Item.UnitName)</span>
+                </div>
+            </div>
+            <div class="col-1">
+                仕入単価
+            </div>
+            <div class="col-2">
+                <div class="input-group">
+                    <input asp-for="StockHistory.UnitPrice" type="text" inputmode="numeric" class="form-control" />
+                    <span class="input-group-text">円</span>
+                </div>
+            </div>
+            <div class="col-1">
+                仕入金額
+            </div>
+            <div class="col-2">
+                <div class="input-group">
+                    <input asp-for="StockHistory.Price" type="text" inputmode="numeric" class="form-control" />
+                    <span class="input-group-text">円</span>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
+                詳細
+            </div>
+            <div class="col-5">
+                <textarea asp-for="StockHistory.Description" rows="2" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
+                参照
+            </div>
+            <div class="col-5">
+                <input asp-for="StockHistory.Reference" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <div>
+                <button name="Update" value="true" class="btn btn-primary">登録</button>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>入出庫履歴</legend>
+        <table>
+            <tr>
+                <th style="width: 5em"></th>
+                <th style="width: 6em"></th>
+                <th style="width: 8em">日付</th>
+                <th style="width: 5em">数量</th>
+                <th style="width: 5em">単価</th>
+                <th style="width: 5em">金額</th>
+                <th>参照</th>
+            </tr>
+            @foreach(var history in Model.Stock.Histories)
+            {
+                <tr>
+                    <td>
+                        @if(string.IsNullOrEmpty(history.SaleId))
+                        {
+                            <button name="Revoke" value="@(history.Id)" class="btn btn-sm btn-danger">
+                                <i class="bi bi-reply"></i>取消
+                            </button>
+                        }
+                    </td>
+                    <td>@(string.IsNullOrEmpty(history.SaleId) ? "" : "販売")@(history.Amount > 0 ? "入庫" : "出庫")</td>
+                    <td>@(history.Date)</td>
+                    <td>@(history.Amount)@(Model.Item.UnitName)</td>
+                    <td>@(history.UnitPrice != null ? Math.Round(history.UnitPrice!.Value, 3) + "円" : "")</td>
+                    <td>@(history.Price != null ? Math.Round(history.Price!.Value, 3) + "円" : "")</td>
+                    <td>@if (!string.IsNullOrEmpty(history.SaleId))
+                        {
+                            <a href="/Sale/@(history.SaleId)" class="btn btn-sm btn-primary">販売登録</a>
+                        }
+                        @if (!string.IsNullOrEmpty(history.Reference))
+                        {
+                            <a href="@(history.Reference)" target="_blank">@(new Uri(history.Reference).Host)</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    </fieldset>
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <div>
+                <a href="/ItemList" class="btn btn-primary">
+                    戻る
+                </a>
+            </div>
+            <div>
+            </div>
+        </div>
+    </nav>
+</form>

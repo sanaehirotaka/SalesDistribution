@@ -1,0 +1,99 @@
+﻿@page
+@model SalesDistribution.Pages.SaleListModel
+@{
+    ViewData["Title"] = "販売一覧";
+}
+@section Scripts {
+<script src="~/js/SaleList.js" defer></script>
+}
+<form method="get">
+    <h2>@(ViewData["Title"])</h2>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <table class="table table-sm salelist" style="width: auto;">
+        <thead>
+            <tr>
+                <th colspan="2">
+                    <a href="/Sale" value="true" class="btn btn-sm btn-primary">
+                        <i class="bi bi-plus"></i>
+                        追加
+                    </a>
+                </th>
+                <th style="width: 6em;">販売日</th>
+                <th style="width: 25em;">名前</th>
+                <th class="text-center" style="width: 5em;">仕入金額</th>
+                <th class="text-center" style="width: 5em;">販売金額</th>
+                <th class="text-center" style="width: 5em;">売上金額</th>
+                <th class="text-center" style="width: 5em;">送料</th>
+                <th class="text-center" style="width: 5em;">販売利益</th>
+                <th class="text-center" style="width: 5em;">利益率</th>
+                <th style="width: 8em;">
+                    <select class="form-control" asp-for="Status">
+                        <option value="">状態</option>
+                        <option value="WithOutClosed">完了以外</option>
+                        <option value="Closed">完了</option>
+                    </select>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var sales = Model.Sales.Sales.Values.Where(sale => Model.Status switch
+                {
+                    "WithOutClosed" => sale.Status != Models.SalesModel.SaleStatus.Closed,
+                    "Closed" => sale.Status == Models.SalesModel.SaleStatus.Closed,
+                    _ => true
+                }).OrderByDescending(sale => sale.Id);
+            }
+            @foreach (var sale in sales)
+            {
+                <tr class="@(sale.Status.ToString().ToLower())">
+                    <td>
+                        <a href="/Sale/@(sale.Id)" class="btn btn-sm btn-primary">
+                            <i class="bi bi-pen"></i>
+                            編集
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/Sale?CopySource=@(sale.Id)" class="btn btn-sm btn-secondary">
+                            <i class="bi bi-copy"></i>
+                            コピー
+                        </a>
+                    </td>
+                    <td>@(sale.SaleDate.ToString("yyyy/MM/dd"))</td>
+                    <td>@(sale.Name)</td>
+                    <td class="text-end">@(sale.PurchasePrice)円</td>
+                    <td class="text-end">@(sale.SalePrice)円</td>
+                    <td class="text-end">@(sale.IncomePrice)円</td>
+                    <td class="text-end">@(sale.SalesCommission)円</td>
+                    <td class="text-end">@(sale.SalesProfit)円</td>
+                    <td class="text-end">@(sale.SalesProfitRatio)%</td>
+                    <td>
+                        @(sale.Status switch
+                        {
+                            Models.SalesModel.SaleStatus.None => "準備中",
+                            Models.SalesModel.SaleStatus.Sold => "販売中",
+                            Models.SalesModel.SaleStatus.Selled => "未発送",
+                            Models.SalesModel.SaleStatus.Shipped => "発送済み",
+                            Models.SalesModel.SaleStatus.Closed => "完了",
+                            _ => ""
+                        })
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2"></td>
+                <td></td>
+                <td></td>
+                <td class="text-end">@(sales.Sum(sales => sales.PurchasePrice))円</td>
+                <td class="text-end">@(sales.Sum(sales => sales.SalePrice))円</td>
+                <td class="text-end">@(sales.Sum(sales => sales.IncomePrice))円</td>
+                <td class="text-end">@(sales.Sum(sales => sales.SalesCommission))円</td>
+                <td class="text-end">@(sales.Sum(sales => sales.SalesProfit))円</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</form>

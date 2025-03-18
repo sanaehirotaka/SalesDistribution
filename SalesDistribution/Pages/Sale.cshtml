@@ -1,0 +1,315 @@
+﻿@page "{id?}"
+@using SalesDistribution.Models
+@model SalesDistribution.Pages.SaleModel
+@inject SalesDistribution.Services.StockService stockService
+@{
+    ViewData["Title"] = "販売登録";
+}
+@section Scripts {
+    <script src="~/js/Sale.js" defer></script>
+}
+<form method="post">
+    <input asp-for="Rute" type="hidden" />
+    <input asp-for="Sale.Id" type="hidden" />
+    <h2>@(ViewData["Title"])</h2>
+    <div class="text-danger">@Html.ValidationSummary()</div>
+    <fieldset>
+        <legend>概要</legend>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
+                販売日
+            </div>
+            <div class="col-7">
+                <input asp-for="Sale.SaleDate" type="date" class="form-control" />
+            </div>
+            <div class="col-4">
+                <span asp-validation-for="Sale.SaleDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
+                名前
+            </div>
+            <div class="col-7">
+                <input asp-for="Sale.Name" type="text" class="form-control" />
+            </div>
+            <div class="col-4">
+                <span asp-validation-for="Sale.Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
+                詳細
+            </div>
+            <div class="col-7">
+                <textarea asp-for="Sale.Description" rows="6" class="form-control"></textarea>
+            </div>
+            <div class="col-4">
+                <span asp-validation-for="Sale.Description" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
+                参照
+            </div>
+            <div class="col-7">
+                <input asp-for="Sale.Reference" type="text" class="form-control" />
+            </div>
+            <div class="col-4">
+                <span asp-validation-for="Sale.Reference" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
+            </div>
+            <div class="col-7">
+                @if (!string.IsNullOrEmpty(Model.Sale.Reference))
+                {
+                    <a href="@(Model.Sale.Reference)" target="_blank">@(Model.Sale.Reference)</a>
+                }
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
+                画像
+            </div>
+            <div class="col-10 images">
+                @for (int i = 0; i < Model.Sale.Images.Count; i++)
+                {
+                    <div class="d-flex justify-content-center align-items-center border image">
+                        <a href="/api/Image/Download/@(Model.Sale.Images[i])" target="_blank">
+                            <img src="/api/Image/Download/@(Model.Sale.Images[i])" />
+                        </a>
+                        <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
+                        <input type="hidden" name="Sale.Images" value="@(Model.Sale.Images[i])" />
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
+                状態
+            </div>
+            <div class="col-8">
+                <div class="row mb-1 align-items-center" style="height: 2.35em;">
+                    <div class="col-4">
+                        <div class="form-check form-switch">
+                            <label>
+                                <input asp-for="Sale.Status" type="radio" value="@(SalesModel.SaleStatus.None)" class="form-check-input">
+                                準備中
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-1 align-items-center" style="height: 2.35em;">
+                    <div class="col-4">
+                        <div class="form-check form-switch">
+                            <label>
+                                <input asp-for="Sale.Status" type="radio" value="@(SalesModel.SaleStatus.Sold)" class="form-check-input">
+                                販売中
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-1 align-items-center" style="height: 2.35em;">
+                    <div class="col-4">
+                        <div class="form-check form-switch">
+                            <label>
+                                <input asp-for="Sale.Status" type="radio" value="@(SalesModel.SaleStatus.Selled)" class="form-check-input">
+                                未発送
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-1 align-items-center" style="height: 2.35em;">
+                    <div class="col-4">
+                        <div class="form-check form-switch">
+                            <label>
+                                <input asp-for="Sale.Status" type="radio" value="@(SalesModel.SaleStatus.Shipped)" class="form-check-input">
+                                発送済み
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <input asp-for="Sale.ShipDate" type="date" class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-1 align-items-center" style="height: 2.35em;">
+                    <div class="col-4">
+                        <div class="form-check form-switch">
+                            <label>
+                                <input asp-for="Sale.Status" type="radio" value="@(SalesModel.SaleStatus.Closed)" class="form-check-input">
+                                完了
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <input asp-for="Sale.CloseDate" type="date" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset @(Model.Sale.Status > SalesModel.SaleStatus.Sold ? "readonly" : "")>
+        <legend>詳細</legend>
+        <div class="row mb-1 align-items-center">
+            <div class="col">
+                <div class="row mb-1 align-items-center">
+
+                    <table class="table table-sm" style="width: auto;">
+                        <tr>
+                            <th><button name="AddItemRow" value="true" class="btn btn-sm btn-primary"><i class="bi bi-plus"></i></button></th>
+                            <th style="width: 10em">SKU</th>
+                            <th style="width: 20em">品目</th>
+                            <th style="width: 6em">数量</th>
+                            <th style="width: 8em">仕入単価</th>
+                            <th style="width: 8em">販売単価</th>
+                            <th style="width: 8.5em">仕入金額</th>
+                            <th style="width: 8.5em">販売金額</th>
+                            <th>在庫数量</th>
+                        </tr>
+                        @for (var i = 0; i < Model.Sale.Items.Count; i++)
+                        {
+                            <tr>
+                                <td><button name="RemoveItemRow" value="@(i)" class="btn btn-sm btn-danger"><i class="bi bi-x"></i></button></td>
+                                <td>
+                                    <div class="input-group">
+                                        <button name="Search" value="@(i)" class="btn btn-sm btn-primary"><i class="bi bi-search"></i></button>
+                                        <input asp-for="Sale.Items[i].Sku" type="text" class="form-control" readonly />
+                                    </div>
+                                </td>
+                                <td><input asp-for="Sale.Items[i].Name" type="text" class="form-control" /></td>
+                                <td><input asp-for="Sale.Items[i].Amount" type="number" inputmode="numeric" class="form-control" /></td>
+                                <td>
+                                    <div class="input-group">
+                                        <input asp-for="Sale.Items[i].PurchaseUnitPrice" type="text" inputmode="numeric" class="form-control" />
+                                        <span class="input-group-text">円</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input asp-for="Sale.Items[i].SaleUnitPrice" type="text" inputmode="numeric" class="form-control" />
+                                        <span class="input-group-text">円</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input asp-for="Sale.Items[i].PurchasePrice" type="text" inputmode="numeric" class="form-control" readonly />
+                                        <span class="input-group-text">円</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input asp-for="Sale.Items[i].SalePrice" type="text" inputmode="numeric" class="form-control" readonly />
+                                        <span class="input-group-text">円</span>
+                                    </div>
+                                </td>
+                                <td name="Sale.Items[@(i)].Stock" style="text-align: right">
+                                    @(await stockService.GetStockAsync(Model.Sale.Items[i].Sku))
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
+                仕入金額
+            </div>
+            <div class="col-2">
+                <div class="input-group">
+                    <input asp-for="Sale.PurchasePrice" type="text" type="text" inputmode="numeric" class="form-control" readonly />
+                    <span class="input-group-text">円</span>
+                </div>
+            </div>
+            <div class="col-1">
+                販売金額
+            </div>
+            <div class="col-2">
+                <div class="input-group">
+                    <input asp-for="Sale.SalePrice" type="text" inputmode="numeric" class="form-control" readonly />
+                    <span class="input-group-text">円</span>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
+                送料
+            </div>
+            <div class="col-2">
+                <div class="input-group">
+                    <input asp-for="Sale.SalesCommission" type="text" inputmode="numeric" class="form-control" />
+                    <span class="input-group-text">円</span>
+                </div>
+            </div>
+            <div class="col-1">
+                手数料(%)
+            </div>
+            <div class="col-2">
+                <div class="input-group">
+                    <input asp-for="Sale.SalesCommissionPer" type="text" inputmode="numeric" class="form-control" />
+                    <span class="input-group-text">%</span>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
+                売上金額
+            </div>
+            <div class="col-2">
+                <div class="input-group">
+                    <input asp-for="Sale.IncomePrice" type="text" inputmode="numeric" class="form-control" readonly />
+                    <span class="input-group-text">円</span>
+                </div>
+            </div>
+            <div class="col-1">
+                販売利益
+            </div>
+            <div class="col-2">
+                <div class="input-group">
+                    <input asp-for="Sale.SalesProfit" type="text" inputmode="numeric" class="form-control" readonly />
+                    <span class="input-group-text">円</span>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <div class="col-3"></div>
+            <div class="col-1">
+                利益率
+            </div>
+            <div class="col-2">
+                <div class="input-group">
+                    <input asp-for="Sale.SalesProfitRatio" type="text" inputmode="numeric" class="form-control" readonly />
+                    <span class="input-group-text">%</span>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <div>
+                <a href="/SaleList" class="btn btn-primary">
+                    戻る
+                </a>
+            </div>
+            <div>
+                <button name="Update" value="true" class="btn btn-primary">登録</button>
+                <button name="Remove" value="true" class="btn btn-danger" @(Model.IsNew || Model.Sale.Status > SalesModel.SaleStatus.None ? "disabled" : "")>削除</button>
+            </div>
+        </div>
+    </nav>
+</form>
+
+<template id="dropImageContainer">
+    <div class="d-flex justify-content-center align-items-center border image">
+        <a href="" target="_blank">
+            <img />
+        </a>
+        <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
+        <input type="hidden" name="Sale.Images[i]" value="" />
+    </div>
+</template>
+<partial name="MessageDialog" />
+<partial name="ItemSelectDialog" />

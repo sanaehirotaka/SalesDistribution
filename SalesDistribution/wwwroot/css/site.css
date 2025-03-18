@@ -1,0 +1,83 @@
+fieldset {
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    padding: .5em 1em;
+    margin: 1em;
+}
+legend {
+    float: initial;
+    width: initial;
+}
+th, td {
+    min-width: 3em;
+    vertical-align: middle;
+}
+input[type=number], input[inputmode=numeric] {
+    text-align: right;
+}
+input[readonly], select[readonly], textarea[readonly],
+fieldset[readonly] input, fieldset[readonly] select, fieldset[readonly] textarea {
+    pointer-events: none;
+    background-color: var(--bs-secondary-bg);
+    opacity: 1;
+}
+fieldset[readonly] .btn {
+    color: var(--bs-btn-disabled-color);
+    pointer-events: none;
+    background-color: var(--bs-btn-disabled-bg);
+    border-color: var(--bs-btn-disabled-border-color);
+    opacity: var(--bs-btn-disabled-opacity);
+}
+
+dialog {
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    padding: 0;
+}
+dialog form {
+    padding: .5em 1em;
+}
+.input-group-text {
+    min-width: 1.9em;
+    padding: 0 .3em;
+}
+.input-validation-error {
+    background-color: var(--bs-danger-bg-subtle);
+    border-color: var(--bs-danger-border-subtle);
+}
+
+.salelist tr.selled td {
+    color: red;
+}
+.salelist tr.shipped td {
+    color: green;
+}
+.salelist tr.closed td {
+    color: gray;
+}
+
+.messageDialog nav button {
+    margin: 0.15em;
+}
+
+.images {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.images .image {
+    width: 200px;
+    height: 200px;
+    margin: .2em;
+    position: relative;
+}
+.images .image img {
+    max-width: 198px;
+    max-height: 198px;
+    display: block;
+}
+.images .image .btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}

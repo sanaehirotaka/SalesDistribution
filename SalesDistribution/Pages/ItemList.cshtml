@@ -1,0 +1,53 @@
+﻿@page
+@model SalesDistribution.Pages.ItemListModel
+@inject SalesDistribution.Services.StockService stockService
+@{
+    ViewData["Title"] = "品目一覧";
+}
+<form method="post">
+    <h2>@(ViewData["Title"])</h2>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <table class="table table-sm" style="width: auto;">
+        <tr>
+            <th>
+                <a href="/Item" value="true" class="btn btn-sm btn-primary">
+                    <i class="bi bi-plus"></i>
+                    追加
+                </a>
+            </th>
+            <th></th>
+            <th style="width: 10em">SKU</th>
+            <th style="width: 25em">品目</th>
+            <th>在庫</th>
+            <th>仕入単価</th>
+        </tr>
+        @foreach (var item in Model.Items.Items.Values.OrderBy(item => item.Sku))
+        {
+            <tr>
+                <td>
+                    <a href="/Item/@(item.Sku)" class="btn btn-sm btn-primary">
+                        <i class="bi bi-pen"></i>
+                        編集
+                    </a>
+                </td>
+                <td>
+                    @if (item.PurchaseTarget)
+                    {
+                        <a href="/Stock/@(item.Sku)" class="btn btn-sm btn-primary">
+                            在庫
+                        </a>
+                    }
+                </td>
+                <td>@(item.Sku)</td>
+                <td>@(item.Name)</td>
+                <td>@(await stockService.GetStockAsync(item.Sku))@(item.UnitName)</td>
+                <td>
+                    @if (await stockService.GetStockAsync(item.Sku) > 0) {
+                        @(await stockService.GetUnitPriceAsync(item.Sku))
+                        @:円
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+</form>

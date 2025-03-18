@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DisableScopedCssBundling>true</DisableScopedCssBundling>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="wwwroot\js\Item.js" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.14" />
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="data\" />
+    </ItemGroup>
+
+</Project>

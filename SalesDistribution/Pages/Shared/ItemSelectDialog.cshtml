@@ -1,0 +1,42 @@
+﻿<script src="~/js/ItemSelectDialog.js" defer></script>
+<template id="itemSelectDialogTemplate">
+    <dialog class="container">
+        <form method="dialog">
+            <input name="IsPurchaseTarget" value="" type="hidden" />
+            <input name="IsSalesTarget" value="" type="hidden" />
+            <input name="IsBundleTarget" value="" type="hidden" />
+            <div class="row mb-1 align-items-center">
+                <div class="col-1">
+                    品目
+                </div>
+                <div class="col">
+                    <input name="Name" type="text" class="form-control" />
+                </div>
+            </div>
+            <table style="width: auto">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th style="width: 10em">SKU</th>
+                        <th style="width: 25em">品目</th>
+                        <th>在庫</th>
+                        <th>仕入単価(円)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="selectButton">
+                            <button class="btn btn-sm btn-success">
+                                <i class="bi bi-check"></i>
+                            </button>
+                        </td>
+                        <td class="sku"></td>
+                        <td class="name"></td>
+                        <td class="stock"></td>
+                        <td class="unitPrice"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </dialog>
+</template>
