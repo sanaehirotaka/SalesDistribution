@@ -64,6 +64,18 @@ public class ItemModel : PageModel
 
     private async Task<IActionResult> Update()
     {
+        if (!Item.PurchaseTarget && !Item.SalesTarget)
+        {
+            ModelState.AddModelError("", "仕入の対象と販売の対象のどちらか指定してください");
+        }
+        if (Item.PurchaseTarget && Item.BundleTarget)
+        {
+            ModelState.AddModelError("", "仕入の対象とバンドルの対象は両立できません");
+        }
+        if (Item.BundleTarget && Item.Bundles.Count == 0)
+        {
+            ModelState.AddModelError("", "バンドルが入力されていません");
+        }
         if (!ModelState.IsValid)
         {
             return Page();

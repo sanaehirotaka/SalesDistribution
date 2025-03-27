@@ -4,8 +4,8 @@ public static class Common
 {
     public static string GenerateId()
     {
-        byte[] bytes = new byte[6];
+        byte[] bytes = new byte[3];
         Random.Shared.NextBytes(bytes);
-        return BitConverter.ToString(bytes).Replace("-", "").ToLower();
+        return DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString("x") + BitConverter.ToString(bytes).Replace("-", "").ToLower();
     }
 }

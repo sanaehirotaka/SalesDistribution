@@ -21,7 +21,7 @@
             <th>在庫</th>
             <th>仕入単価</th>
         </tr>
-        @foreach (var item in Model.Items.Items.Values)
+        @foreach (var item in Model.Items.Items.Values.OrderBy(item => item.Sku))
         {
             <tr>
                 <td>

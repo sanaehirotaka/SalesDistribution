@@ -21,7 +21,7 @@
             <th style="width: 5em;">販売利益</th>
             <th style="width: 8em;">状態</th>
         </tr>
-        @foreach (var sale in Model.Sales.Sales.Values)
+        @foreach (var sale in Model.Sales.Sales.Values.OrderBy(sale => sale.Id))
         {
             <tr>
                 <td>
