@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+ï»¿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SalesDistribution.Models;
 using SalesDistribution.Services;
@@ -61,10 +61,10 @@ public class SaleModel : PageModel
         {
             if (Sale.Items.Count(item => item.Sku == view.Item.Sku) > 1)
             {
-                ModelState.AddModelError($"Sale.Items[{view.Index}].Sku", "•i–Ú‚ªd•¡‚µ‚Ä‚¢‚Ü‚·");
+                ModelState.AddModelError($"Sale.Items[{view.Index}].Sku", "å“ç›®ãŒé‡è¤‡ã—ã¦ã„ã¾ã™");
             }
         }
-        if (!ModelState.IsValid) // ƒoƒŠƒf[ƒVƒ‡ƒ“ƒ`ƒFƒbƒN
+        if (!ModelState.IsValid) // ãƒãƒªãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯
         {
             return Page();
         }

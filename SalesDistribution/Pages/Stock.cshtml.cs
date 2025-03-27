@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+ï»¿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SalesDistribution.Models;
 using SalesDistribution.Services;
@@ -78,7 +78,7 @@ public class StockModel : PageModel
         var items = await serializer.ReadAsync<ItemsModel>() ?? new();
         Item = items.Items.GetOrAdd(Sku, key => new());
 
-        if (!ModelState.IsValid) // ƒoƒŠƒf[ƒVƒ‡ƒ“ƒ`ƒFƒbƒN
+        if (!ModelState.IsValid) // ãƒãƒªãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯
         {
             return Page();
         }
