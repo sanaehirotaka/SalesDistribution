@@ -1,0 +1,44 @@
+fieldset {
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    padding: .5em 1em;
+    margin: 1em;
+}
+legend {
+    float: initial;
+    width: initial;
+}
+th, td {
+    min-width: 3em;
+    vertical-align: middle;
+}
+input[type=number] {
+    text-align: right;
+}
+input[readonly], select[readonly], textarea[readonly],
+fieldset[readonly] input, fieldset[readonly] select, fieldset[readonly] textarea {
+    pointer-events: none;
+    background-color: var(--bs-secondary-bg);
+    opacity: 1;
+}
+fieldset[readonly] .btn {
+    color: var(--bs-btn-disabled-color);
+    pointer-events: none;
+    background-color: var(--bs-btn-disabled-bg);
+    border-color: var(--bs-btn-disabled-border-color);
+    opacity: var(--bs-btn-disabled-opacity);
+}
+
+dialog {
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    padding: 0;
+}
+    dialog form {
+        padding: .5em 1em;
+    }
+
+.input-validation-error {
+    background-color: var(--bs-danger-bg-subtle);
+    border-color: var(--bs-danger-border-subtle);
+}

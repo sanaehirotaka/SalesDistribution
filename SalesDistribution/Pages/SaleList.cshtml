@@ -1,0 +1,48 @@
+﻿@page
+@model SalesDistribution.Pages.SaleListModel
+@{
+    ViewData["Title"] = "販売一覧";
+}
+<form method="post">
+    <h2>@(ViewData["Title"])</h2>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <table class="table table-sm" style="width: auto;">
+        <tr>
+            <th>
+                <a href="/Sale" value="true" class="btn btn-sm btn-primary">
+                    <i class="bi bi-plus"></i>
+                    追加
+                </a>
+            </th>
+            <th style="width: 25em;">名前</th>
+            <th style="width: 5em;">仕入金額</th>
+            <th style="width: 5em;">販売金額</th>
+            <th style="width: 5em;">売上金額</th>
+            <th style="width: 5em;">販売利益</th>
+            <th style="width: 8em;">状態</th>
+        </tr>
+        @foreach (var sale in Model.Sales.Sales.Values)
+        {
+            <tr>
+                <td>
+                    <a href="/Sale/@(sale.Id)" class="btn btn-sm btn-primary">
+                        <i class="bi bi-pen"></i>
+                        編集
+                    </a>
+                </td>
+                <td>@(sale.Name)</td>
+                <td>@(sale.PurchasePrice)円</td>
+                <td>@(sale.SalePrice)円</td>
+                <td>@(sale.IncomePrice)円</td>
+                <td>@(sale.SalesProfit)円</td>
+                <td>@(sale.Status switch {
+                    Models.SalesModel.SaleStatus.None => "準備中",
+                    Models.SalesModel.SaleStatus.Sold => "販売中",
+                    Models.SalesModel.SaleStatus.Selled => "売り切れ",
+                    Models.SalesModel.SaleStatus.Closed => "完了",
+                    _ => ""
+                })</td>
+            </tr>
+        }
+    </table>
+</form>
