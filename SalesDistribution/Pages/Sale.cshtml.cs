@@ -42,6 +42,8 @@ public class SaleModel : PageModel
                 Sale = sales.Sales.GetValueOrDefault(CopySource) ?? new();
                 Sale.Id = Common.GenerateId();
                 Sale.Status = SalesModel.SaleStatus.None;
+                Sale.ShipDate = null;
+                Sale.CloseDate = null;
             }
         }
         else
