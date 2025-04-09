@@ -79,14 +79,17 @@
                 在庫数量
             </div>
             <div class="col-2">
-                <input asp-for="Stock.TotalAmount" type="text" class="form-control" />
+                <div class="input-group">
+                    <input asp-for="Stock.TotalAmount" inputmode="numeric" type="text" class="form-control" />
+                    <span class="input-group-text">@(Model.Item.UnitName)</span>
+                </div>
             </div>
             <div class="col-1">
                 平均単価
             </div>
             <div class="col-2">
                 <div class="input-group">
-                    <input value="@(Math.Round(Model.Stock.PurchaseUnitPrice, 3))" type="text" class="form-control" />
+                    <input value="@(Math.Round(Model.Stock.PurchaseUnitPrice, 3))" type="text" inputmode="numeric" class="form-control" />
                     <span class="input-group-text">円</span>
                 </div>
             </div>
@@ -105,14 +108,17 @@
                 入庫数量
             </div>
             <div class="col-2">
-                <input asp-for="StockHistory.Amount" type="number" class="form-control" />
+                <div class="input-group">
+                    <input asp-for="StockHistory.Amount" type="text" inputmode="numeric" class="form-control" />
+                    <span class="input-group-text">@(Model.Item.UnitName)</span>
+                </div>
             </div>
             <div class="col-1">
                 仕入単価
             </div>
             <div class="col-2">
                 <div class="input-group">
-                    <input asp-for="StockHistory.UnitPrice" type="number" class="form-control" />
+                    <input asp-for="StockHistory.UnitPrice" type="text" inputmode="numeric" class="form-control" />
                     <span class="input-group-text">円</span>
                 </div>
             </div>
@@ -121,7 +127,7 @@
             </div>
             <div class="col-2">
                 <div class="input-group">
-                    <input asp-for="StockHistory.Price" type="number" class="form-control" />
+                    <input asp-for="StockHistory.Price" type="text" inputmode="numeric" class="form-control" />
                     <span class="input-group-text">円</span>
                 </div>
             </div>
@@ -173,7 +179,7 @@
                     </td>
                     <td>@(string.IsNullOrEmpty(history.SaleId) ? "" : "販売")@(history.Amount > 0 ? "入庫" : "出庫")</td>
                     <td>@(history.Date)</td>
-                    <td>@(history.Amount)</td>
+                    <td>@(history.Amount)@(Model.Item.UnitName)</td>
                     <td>@(history.UnitPrice != null ? Math.Round(history.UnitPrice!.Value, 3) + "円" : "")</td>
                     <td>@(history.Price != null ? Math.Round(history.Price!.Value, 3) + "円" : "")</td>
                     <td>@if (!string.IsNullOrEmpty(history.SaleId))
@@ -196,6 +202,8 @@
                 <a href="/ItemList" class="btn btn-primary">
                     戻る
                 </a>
+            </div>
+            <div>
             </div>
         </div>
     </nav>

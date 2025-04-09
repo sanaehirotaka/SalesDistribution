@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SalesDistribution.Models;
 using SalesDistribution.Services;
-using System;
 
 namespace SalesDistribution.Pages;
 
@@ -11,6 +10,9 @@ public class SaleModel : PageModel
     private readonly Serializer serializer;
 
     private readonly StockService stockService;
+
+    [BindProperty(SupportsGet = true)]
+    public string? CopySource { get; set; }
 
     [BindProperty]
     public string Rute { get; set; } = "Update";
@@ -34,6 +36,13 @@ public class SaleModel : PageModel
         if (id == null)
         {
             Sale = new();
+            if (CopySource != null)
+            {
+                var sales = await serializer.ReadAsync<SalesModel>() ?? new();
+                Sale = sales.Sales.GetValueOrDefault(CopySource) ?? new();
+                Sale.Id = Common.GenerateId();
+                Sale.Status = SalesModel.SaleStatus.None;
+            }
         }
         else
         {
@@ -57,12 +66,20 @@ public class SaleModel : PageModel
 
     private async Task<IActionResult> Update()
     {
-        foreach (var view in Sale.Items.Select((item, index) => (Item : item, Index : index)))
+        foreach (var view in Sale.Items.Select((item, index) => (Item: item, Index: index)))
         {
             if (Sale.Items.Count(item => item.Sku == view.Item.Sku) > 1)
             {
                 ModelState.AddModelError($"Sale.Items[{view.Index}].Sku", "品目が重複しています");
             }
+        }
+        if (Sale.Items.Count == 0)
+        {
+            ModelState.AddModelError($"", "品目がありません");
+        }
+        if (Sale.SalePrice < 300)
+        {
+            ModelState.AddModelError($"Sale.SalePrice", "販売金額は300円以上である必要があります");
         }
         if (!ModelState.IsValid) // バリデーションチェック
         {

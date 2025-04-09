@@ -1,4 +1,4 @@
-﻿namespace SalesDistribution.Services;
+﻿namespace SalesDistribution;
 
 public static class Common
 {

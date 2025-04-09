@@ -11,6 +11,9 @@ public class SaleListModel : PageModel
 
     public SalesModel Sales { get; set; }
 
+    [BindProperty(SupportsGet = true)]
+    public string? Status { get; set; }
+
     public SaleListModel(Serializer serializer)
     {
         this.serializer = serializer;

@@ -17,6 +17,9 @@ public class ItemsModel : IModelBase
         [Required]
         public string Name { get; set; } = default!;
 
+        [Required]
+        public string UnitName { get; set; } = default!;
+
         public string? Description { get; set; }
 
         [Required]

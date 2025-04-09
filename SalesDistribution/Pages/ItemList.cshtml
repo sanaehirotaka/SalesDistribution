@@ -40,7 +40,7 @@
                 </td>
                 <td>@(item.Sku)</td>
                 <td>@(item.Name)</td>
-                <td>@(await stockService.GetStockAsync(item.Sku))</td>
+                <td>@(await stockService.GetStockAsync(item.Sku))@(item.UnitName)</td>
                 <td>
                     @if (await stockService.GetStockAsync(item.Sku) > 0) {
                         @(await stockService.GetUnitPriceAsync(item.Sku))

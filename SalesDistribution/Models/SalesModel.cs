@@ -1,5 +1,4 @@
-﻿using SalesDistribution.Services;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 
 namespace SalesDistribution.Models;
 
@@ -13,6 +12,8 @@ public class SalesModel : IModelBase
     public class Sale
     {
         public string Id { get; set; } = Common.GenerateId();
+
+        public DateOnly SaleDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
         public string Name { get; set; }
 
@@ -34,7 +35,13 @@ public class SalesModel : IModelBase
 
         public int SalesProfit { get; set; }
 
+        public decimal SalesProfitRatio { get; set; }
+
         public SaleStatus Status { get; set;}
+
+        public DateOnly? ShipDate { get; set; }
+
+        public DateOnly? CloseDate { get; set; }
     }
 
     public class SaleItem
@@ -59,6 +66,7 @@ public class SalesModel : IModelBase
         None,
         Sold,
         Selled,
+        Shipped,
         Closed
     }
 }

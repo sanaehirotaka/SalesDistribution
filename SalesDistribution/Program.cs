@@ -1,5 +1,8 @@
 using SalesDistribution.Models;
 using SalesDistribution.Services;
+using System.Globalization;
+
+CultureInfo.CurrentCulture = new CultureInfo("ja-JP");
 
 var builder = WebApplication.CreateBuilder(args);
 

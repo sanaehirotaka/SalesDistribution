@@ -37,6 +37,17 @@
         </div>
         <div class="row mb-1 align-items-center">
             <div class="col-1">
+                単位
+            </div>
+            <div class="col-1">
+                <input asp-for="Item.UnitName" type="text" class="form-control" />
+            </div>
+            <div class="col-4">
+                <span asp-validation-for="Item.UnitName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <div class="col-1">
                 詳細
             </div>
             <div class="col-5">
@@ -94,7 +105,7 @@
                             </div>
                         </td>
                         <td><input asp-for="Item.Bundles[i].Name" type="text" class="form-control" readonly /></td>
-                        <td><input asp-for="Item.Bundles[i].Amount" type="number" class="form-control" /></td>
+                        <td><input asp-for="Item.Bundles[i].Amount" type="text" inputmode="numeric" class="form-control" /></td>
                     </tr>
                 }
             </table>
@@ -115,4 +126,5 @@
     </nav>
 </form>
 
+<partial name="MessageDialog" />
 <partial name="ItemSelectDialog" />

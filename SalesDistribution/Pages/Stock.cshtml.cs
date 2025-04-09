@@ -106,6 +106,8 @@ public class StockModel : PageModel
     {
         var stocks = await serializer.ReadAsync<StocksModel>() ?? new();
         Stock = stocks.Stocks.GetOrAdd(Sku, key => new());
+        var items = await serializer.ReadAsync<ItemsModel>() ?? new();
+        Item = items.Items.GetOrAdd(Sku, key => new());
 
         Stock.Histories.RemoveAll(x => x.Id == Revoke);
 
