@@ -18,12 +18,13 @@
                         追加
                     </a>
                 </th>
-                <th style="width: 7em;">販売日</th>
+                <th style="width: 6em;">販売日</th>
                 <th style="width: 25em;">名前</th>
                 <th style="width: 5em;">仕入金額</th>
                 <th style="width: 5em;">販売金額</th>
                 <th style="width: 5em;">売上金額</th>
                 <th style="width: 5em;">販売利益</th>
+                <th style="width: 5em;">利益率</th>
                 <th style="width: 8em;">
                     <select class="form-control" asp-for="Status">
                         <option value="">状態</option>
@@ -57,12 +58,13 @@
                             コピー
                         </a>
                     </td>
-                    <td>@(sale.SaleDate)</td>
+                    <td>@(sale.SaleDate.ToString("yyyy/MM/dd"))</td>
                     <td>@(sale.Name)</td>
                     <td>@(sale.PurchasePrice)円</td>
                     <td>@(sale.SalePrice)円</td>
                     <td>@(sale.IncomePrice)円</td>
                     <td>@(sale.SalesProfit)円</td>
+                    <td>@(sale.SalesProfitRatio)%</td>
                     <td>
                         @(sale.Status switch
                         {
@@ -86,6 +88,7 @@
                 <td>@(sales.Sum(sales => sales.SalePrice))円</td>
                 <td>@(sales.Sum(sales => sales.IncomePrice))円</td>
                 <td>@(sales.Sum(sales => sales.SalesProfit))円</td>
+                <td></td>
                 <td></td>
             </tr>
         </tfoot>
