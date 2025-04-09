@@ -35,7 +35,7 @@ public class StockService
         }
         if (item.Bundles.Count > 0)
         {
-            return (await Task.WhenAll(item.Bundles.Select(async item => (int)(await GetStockAsync(item.Sku) ?? 0 / item.Amount)))).Min();
+            return (await Task.WhenAll(item.Bundles.Select(async bundle => (int)((await GetStockAsync(bundle.Sku) ?? 0) / bundle.Amount)))).Min();
         }
         return null;
     }
