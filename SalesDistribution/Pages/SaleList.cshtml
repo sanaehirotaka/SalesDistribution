@@ -20,11 +20,12 @@
                 </th>
                 <th style="width: 6em;">販売日</th>
                 <th style="width: 25em;">名前</th>
-                <th style="width: 5em;">仕入金額</th>
-                <th style="width: 5em;">販売金額</th>
-                <th style="width: 5em;">売上金額</th>
-                <th style="width: 5em;">販売利益</th>
-                <th style="width: 5em;">利益率</th>
+                <th class="text-center" style="width: 5em;">仕入金額</th>
+                <th class="text-center" style="width: 5em;">販売金額</th>
+                <th class="text-center" style="width: 5em;">売上金額</th>
+                <th class="text-center" style="width: 5em;">送料</th>
+                <th class="text-center" style="width: 5em;">販売利益</th>
+                <th class="text-center" style="width: 5em;">利益率</th>
                 <th style="width: 8em;">
                     <select class="form-control" asp-for="Status">
                         <option value="">状態</option>
@@ -60,11 +61,12 @@
                     </td>
                     <td>@(sale.SaleDate.ToString("yyyy/MM/dd"))</td>
                     <td>@(sale.Name)</td>
-                    <td>@(sale.PurchasePrice)円</td>
-                    <td>@(sale.SalePrice)円</td>
-                    <td>@(sale.IncomePrice)円</td>
-                    <td>@(sale.SalesProfit)円</td>
-                    <td>@(sale.SalesProfitRatio)%</td>
+                    <td class="text-end">@(sale.PurchasePrice)円</td>
+                    <td class="text-end">@(sale.SalePrice)円</td>
+                    <td class="text-end">@(sale.IncomePrice)円</td>
+                    <td class="text-end">@(sale.SalesCommission)円</td>
+                    <td class="text-end">@(sale.SalesProfit)円</td>
+                    <td class="text-end">@(sale.SalesProfitRatio)%</td>
                     <td>
                         @(sale.Status switch
                         {
@@ -84,10 +86,11 @@
                 <td colspan="2"></td>
                 <td></td>
                 <td></td>
-                <td>@(sales.Sum(sales => sales.PurchasePrice))円</td>
-                <td>@(sales.Sum(sales => sales.SalePrice))円</td>
-                <td>@(sales.Sum(sales => sales.IncomePrice))円</td>
-                <td>@(sales.Sum(sales => sales.SalesProfit))円</td>
+                <td class="text-end">@(sales.Sum(sales => sales.PurchasePrice))円</td>
+                <td class="text-end">@(sales.Sum(sales => sales.SalePrice))円</td>
+                <td class="text-end">@(sales.Sum(sales => sales.IncomePrice))円</td>
+                <td class="text-end">@(sales.Sum(sales => sales.SalesCommission))円</td>
+                <td class="text-end">@(sales.Sum(sales => sales.SalesProfit))円</td>
                 <td></td>
                 <td></td>
             </tr>
