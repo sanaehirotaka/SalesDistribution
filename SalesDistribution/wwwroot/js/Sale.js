@@ -80,3 +80,61 @@ document.querySelector("form").addEventListener("submit", async e => {
         delete e.target.dataset.submitted;
     }
 });
+document.querySelector(".images").addEventListener("click", async e => {
+    const button = e.target.closest("button");
+    if (!button) {
+        return;
+    }
+    e.stopPropagation();
+    e.preventDefault();
+    if (await new MessageDialog("画像を削除しますか？", "はい", "いいえ").show() == "はい") {
+        button.closest(".image").remove();
+    }
+});
+window.addEventListener('dragenter', (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    document.body.classList.add('dragover');
+});
+window.addEventListener('dragover', (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'copy';
+});
+window.addEventListener('dragleave', (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    document.body.classList.remove('dragover');
+});
+window.addEventListener('drop', async (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    document.body.classList.remove('dragover');
+
+    const files = [...event.dataTransfer.files].filter(file => file.type.startsWith('image/'));
+    if (files.length === 0) {
+        return;
+    }
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+        formData.append(`Images`, files[i], files[i].name);
+    }
+    const imageIds = await (await fetch("/api/Image/Upload", { method: "POST", body: formData })).json();
+    for (let i = 0; i < imageIds.length; i++) {
+        const container = document.querySelector("#dropImageContainer").content.cloneNode(true);
+
+        const input = container.querySelector(`input[type="hidden"]`);
+        input.setAttribute("name", `Sale.Images`);
+        input.setAttribute("value", imageIds[i]);
+
+        const url = "/api/Image/Download/" + imageIds[i];
+
+        const link = container.querySelector(`a`);
+        link.setAttribute("href", url);
+
+        const img = container.querySelector(`img`);
+        img.setAttribute("src", url);
+
+        document.querySelector("form .images").append(container);
+    }
+});

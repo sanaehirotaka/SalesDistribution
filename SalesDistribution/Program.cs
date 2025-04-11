@@ -14,6 +14,7 @@ builder.Services
 builder.Services.AddSingleton<OptionsModel>();
 builder.Services.AddScoped<Serializer>();
 builder.Services.AddScoped<StockService>();
+builder.Services.AddScoped<ImageService>();
 
 var app = builder.Build();
 

@@ -11,6 +11,8 @@ public class SaleModel : PageModel
 
     private readonly StockService stockService;
 
+    private readonly ImageService imageService;
+
     [BindProperty(SupportsGet = true)]
     public string? CopySource { get; set; }
 
@@ -25,10 +27,11 @@ public class SaleModel : PageModel
     [BindProperty]
     public int? RemoveItemRow { get; set; }
 
-    public SaleModel(Serializer serializer, StockService stockService)
+    public SaleModel(Serializer serializer, StockService stockService, ImageService imageService)
     {
         this.serializer = serializer;
         this.stockService = stockService;
+        this.imageService = imageService;
     }
 
     public async Task<IActionResult> OnGetAsync(string? id)
@@ -89,13 +92,17 @@ public class SaleModel : PageModel
         }
 
         var sales = await serializer.ReadAsync<SalesModel>() ?? new();
-
+        var oldImages = new List<string>();
         if (sales.Sales.TryGetValue(Sale.Id, out var oldSale))
         {
             foreach (var saleItem in oldSale.Items.Where(item => !Sale.Items.Any(v => v.Sku == item.Sku)))
             {
-                await stockService.PopSaleStock(saleItem.Sku!, Sale.Id);
+                if (saleItem.Sku != null)
+                {
+                    await stockService.PopSaleStock(saleItem.Sku, Sale.Id);
+                }
             }
+            oldImages = oldSale.Images;
         }
         sales.Sales[Sale.Id] = Sale;
 
@@ -111,6 +118,14 @@ public class SaleModel : PageModel
                 });
             }
         }
+        foreach (var imageId in Sale.Images)
+        {
+            await imageService.PutAsync(imageId, Sale.Id);
+        }
+        foreach (var oldId in oldImages.Where(oldId => !Sale.Images.Contains(oldId)))
+        {
+            await imageService.DeleteAsync(oldId, Sale.Id);
+        }
         return RedirectToPage("SaleList");
     }
 
@@ -121,11 +136,19 @@ public class SaleModel : PageModel
         {
             foreach (var saleItem in sale.Items)
             {
-                await stockService.PopSaleStock(saleItem.Sku!, Sale.Id);
+                if (saleItem.Sku != null)
+                {
+                    await stockService.PopSaleStock(saleItem.Sku, Sale.Id);
+                }
             }
             sales.Sales.Remove(Sale.Id, out var _);
         }
         await serializer.WriteAsync(sales);
+
+        foreach (var imageId in Sale.Images)
+        {
+            await imageService.DeleteAsync(imageId, Sale.Id);
+        }
         return RedirectToPage("SaleList");
     }
 

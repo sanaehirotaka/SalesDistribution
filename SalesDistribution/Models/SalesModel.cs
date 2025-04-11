@@ -15,11 +15,13 @@ public class SalesModel : IModelBase
 
         public DateOnly SaleDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
-        public string Name { get; set; }
+        public string Name { get; set; } = default!;
 
         public string? Description { get; set; }
 
         public string? Reference { get; set; }
+
+        public List<string> Images { get; set; } = [];
 
         public List<SaleItem> Items { get; set; } = [];
 

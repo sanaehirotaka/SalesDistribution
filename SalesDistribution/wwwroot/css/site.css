@@ -59,3 +59,25 @@ dialog form {
 .messageDialog nav button {
     margin: 0.15em;
 }
+
+.images {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.images .image {
+    width: 200px;
+    height: 200px;
+    margin: .2em;
+    position: relative;
+}
+.images .image img {
+    max-width: 198px;
+    max-height: 198px;
+    display: block;
+}
+.images .image .btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}

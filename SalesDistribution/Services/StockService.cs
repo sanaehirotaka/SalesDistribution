@@ -108,6 +108,7 @@ public class StockService
         }
         await serializer.WriteAsync(stocks);
     }
+
     public async Task PopSaleStock(string sku, string saleId)
     {
         stocks ??= await serializer.ReadAsync<StocksModel>() ?? new();
