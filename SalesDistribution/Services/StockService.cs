@@ -59,7 +59,7 @@ public class StockService
         }
         if (item.Bundles.Count > 0)
         {
-            return (await Task.WhenAll(item.Bundles.Select(async item => (int)(await GetUnitPriceAsync(item.Sku) ?? 0 * item.Amount)))).Sum();
+            return (await Task.WhenAll(item.Bundles.Select(async item => (int)((await GetUnitPriceAsync(item.Sku) ?? 0) * item.Amount)))).Sum();
         }
         return null;
     }
