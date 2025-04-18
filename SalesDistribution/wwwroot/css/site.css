@@ -81,10 +81,3 @@ dialog form {
     bottom: 0;
     right: 0;
 }
-td a:not(.btn) {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 100%;
-    display: inline-block;
-    overflow: hidden;
-}

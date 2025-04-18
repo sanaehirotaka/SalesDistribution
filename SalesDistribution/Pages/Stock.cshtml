@@ -188,7 +188,7 @@
                         }
                         @if (!string.IsNullOrEmpty(history.Reference))
                         {
-                            <a href="@(history.Reference)" target="_blank">@(history.Reference)</a>
+                            <a href="@(history.Reference)" target="_blank">@(new Uri(history.Reference).Host)</a>
                         }
                     </td>
                 </tr>

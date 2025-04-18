@@ -71,13 +71,21 @@ public class StockModel : PageModel
         return stock;
     }
 
-    public async Task<IActionResult> Update()
+    private async Task<IActionResult> Update()
     {
         var stocks = await serializer.ReadAsync<StocksModel>() ?? new();
         Stock = stocks.Stocks.GetOrAdd(Sku, key => new());
         var items = await serializer.ReadAsync<ItemsModel>() ?? new();
         Item = items.Items.GetOrAdd(Sku, key => new());
 
+        if (!string.IsNullOrEmpty(StockHistory.Reference) && !Uri.TryCreate(StockHistory.Reference, UriKind.Absolute, out var _))
+        {
+            ModelState.AddModelError($"StockHistory.Reference", "URL形式で入力してください");
+        }
+        if (StockHistory.Amount == 0)
+        {
+            ModelState.AddModelError($"StockHistory.Amount", "数量は0以外で入力してください");
+        }
         if (!ModelState.IsValid) // バリデーションチェック
         {
             return Page();
@@ -102,7 +110,7 @@ public class StockModel : PageModel
         return Page();
     }
 
-    public async Task<IActionResult> RevokeStock()
+    private async Task<IActionResult> RevokeStock()
     {
         var stocks = await serializer.ReadAsync<StocksModel>() ?? new();
         Stock = stocks.Stocks.GetOrAdd(Sku, key => new());
